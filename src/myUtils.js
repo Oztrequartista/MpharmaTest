@@ -16,15 +16,28 @@ export const sortedPrices = (array, name) => {
   return convertDates;
 };
 
+// export const valuesOfAllPrices = (array, key) => {
+//   const initialValue = {};
+//   return array.reduce((object, arrayItem) => {
+//     const sortedPricesByDates = sortedPrices(arrayItem.prices, arrayItem.name);
+//     return {
+//       ...object,
+//       [arrayItem[key]]: {
+//         [arrayItem.name]: sortedPricesByDates,
+//       },
+//     };
+//   }, initialValue);
+// };
+
+
 export const valuesOfAllPrices = (array, key) => {
   const initialValue = {};
   return array.reduce((object, arrayItem) => {
     const sortedPricesByDates = sortedPrices(arrayItem.prices, arrayItem.name);
     return {
       ...object,
-      [arrayItem[key]]: {
-        [arrayItem.name]: sortedPricesByDates,
-      },
+      [arrayItem[key]]: sortedPricesByDates,
+      
     };
   }, initialValue);
 };
@@ -36,10 +49,11 @@ export const getLatestPriceFromProductList = (array) => {
     const lastPriceIndex = sorted.length - 1;
     return {
       name: item.name,
+      productId:item.id,
       itemPrice: sorted[lastPriceIndex].price,
       priceId: sorted[lastPriceIndex].priceId,
       date: new Date(sorted[lastPriceIndex].date).toDateString(), //convert latest  product date to readable string
-      productIDs: [...item.prices.map((i) => i.id)],
+      priceIdArray: [...item.prices.map((i) => i.id)],
     };
   });
 };

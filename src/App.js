@@ -8,6 +8,8 @@ import {
   formattedDate,
 } from "./myUtils";
 
+import "./App.css";
+
 const ACTIONS = {
   FETCH_PRODUCTS: "FETCH_PRODUCTS",
   ITEM_ADDED: "ITEM_ADDED",
@@ -15,6 +17,7 @@ const ACTIONS = {
   ITEM_EDITED: "ITEM_EDITED",
 };
 
+const sessionKey = "initial_app_state";
 const apiEndPoint = "http://www.mocky.io/v2/5c3e15e63500006e003e9795";
 const initialState = {
   products: [],
@@ -28,7 +31,9 @@ function App() {
     itemPrice: "",
     date: new Date().toDateString(),
   });
-  // const [productId, setProductId] = useState();
+  const [isEditing, setIsEditing] = useState(false);
+  const [productId, setProductId] = useState();
+
   // //initial page load
 
   useEffect(() => {
@@ -43,7 +48,7 @@ function App() {
       const products = getLatestPriceFromProductList(productList);
       console.log("products", products);
 
-     // set fetched data to state with reducer
+      // set fetched data to state with reducer function
       if (isMounted) {
         dispatch({
           type: ACTIONS.FETCH_PRODUCTS,
@@ -52,10 +57,17 @@ function App() {
       }
     };
     fetchProducts().catch(console.error);
+
     return () => {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    console.log("state of App", state);
+    console.log("state of isEditing after state update", isEditing);
+    sessionStorage.setItem(sessionKey, JSON.stringify(initialState));
+  }, [state]);
 
   //form functions
 
@@ -73,25 +85,47 @@ function App() {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const { name, itemPrice } = state;
+    const { name, itemPrice } = newProduct;
 
     //REMEMBER go add case to handle empty input values
+    //add alert modal that tells user to enter a number for price and remove number field from input
 
-    //  if(name.length && itemPrice.length){
+    // if (name.length && itemPrice.length) {
+    //   dispatch({ type: ACTIONS.ITEM_ADDED, payload: newProduct });
+    //   setNewProduct({
+    //     name: "",
+    //     itemPrice: "",
+    //     date: new Date().toDateString(),
+    //   });
+    // } else {
+    //   alert("enter valid inputs");
+    // }
 
-    //  }
+    // isEditing:isEditing
 
-    dispatch({ type: ACTIONS.ITEM_ADDED, payload: newProduct });
-    setNewProduct({ name: "", itemPrice: "", date: new Date().toDateString() });
+    dispatch({
+      type: ACTIONS.ITEM_ADDED,
+      payload: { newProduct, isEditing: isEditing },
+    });
+    setNewProduct({
+      name: "",
+      itemPrice: "",
+      date: new Date().toDateString(),
+    });
+    setIsEditing(false);
   };
 
   const handleEditAndAdd = (id) => {
     console.log(
-      "product ID",
+      "selected product",
       state.products.find((item) => item.priceId === id)
     );
-    setNewProduct( state.products.find((item) => item.priceId === id))
-    // dispatch({ type: ACTIONS.ITEM_EDITED, payload: id });
+
+    const editedProduct = state.products.find((item) => item.priceId === id);
+    setIsEditing(true);
+    setNewProduct(editedProduct);
+
+    // dispatch({ type: ACTIONS.ITEM_EDITED, payload: {editedProduct, id, isEditing: true} });
   };
 
   const handleProductDelete = (id) => {
@@ -99,61 +133,84 @@ function App() {
     dispatch({ type: ACTIONS.ITEM_DELETED, payload: id });
   };
 
+  const handleProductPriceHistory = (id) => {
+    console.log("id", id);
+    const pricesToDisplay = state.itemPrices[id];
+    console.log("pricesToDisplay", pricesToDisplay);
+  };
+
   //values before rendering
   const { name, itemPrice } = newProduct;
-  // console.log("state of App", state);
-
   if (state.products.length < 1) return <h2>Loading ....</h2>;
 
   return (
     <>
       <div>
         <Navbar />
-        <div>
-          <form action="" onSubmit={handleFormSubmit}>
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={handleInputChange}
-            />
-            <input
-              type="number"
-              name="itemPrice"
-              value={itemPrice}
-              onChange={handleInputChange}
-            />
-            <button>Add Product</button>
-          </form>
+        <div className="container">
+          <div className="form-container">
+            <form action="" onSubmit={handleFormSubmit}>
+              <label htmlFor="Product">Product Name</label>
+              <input
+                type="text"
+                name="name"
+                value={name}
+                onChange={handleInputChange}
+                required
+              />
+              <label htmlFor="Product">Price</label>
+              <input
+                type=""
+                name="itemPrice"
+                value={itemPrice}
+                onChange={handleInputChange}
+                required
+              />
+              <button className="submit">Add Product</button>
+            </form>
+          </div>
 
-          {state.products.length &&
-            state.products.map((singleProduct, index) => {
-              const { itemPrice, name, date, priceId } = singleProduct;
-              const dateAsString = formattedDate(date);
-              return (
-                <div key={priceId}>
-                  <h2>{name}</h2>
-                  <h3>GHS {itemPrice}</h3>
-                  <h4>{dateAsString}</h4>
-                  <button
-                    onClick={(event) => {
-                      event.preventDefault();
-                      handleEditAndAdd(priceId);
-                    }}
-                  >
-                    Edit Product
-                  </button>
-                  <button
-                    onClick={(event) => {
-                      event.preventDefault();
-                      handleProductDelete(priceId);
-                    }}
-                  >
-                    Delete Product
-                  </button>
-                </div>
-              );
-            })}
+          <div className="product-container">
+            {state.products.length &&
+              state.products.map((singleProduct, index) => {
+                const { itemPrice, name, date, priceId, productId } =
+                  singleProduct;
+                const dateAsString = formattedDate(date);
+                return (
+                  <div key={priceId} className="product">
+                    <h2 className="name">{name}</h2>
+                    <button className="price">GHS {itemPrice}</button>
+                    <h4 className="date">{dateAsString}</h4>
+                    <div className="btn-container">
+                      <button
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleEditAndAdd(priceId);
+                        }}
+                      >
+                        Edit Product
+                      </button>
+                      <button
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleProductDelete(priceId);
+                        }}
+                      >
+                        Delete Product
+                      </button>
+                      <button
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleProductPriceHistory(productId);
+                        }}
+                      >
+                        Price History
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
         </div>
       </div>
     </>
