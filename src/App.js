@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import Modal from "./components/Modal/Modal";
 import Form from "./components/Form/Form"
 import Products from "./components/Products/Products";
+import Alert from "./components/Alert";
 
 //styles
 import "./App.css";
@@ -21,6 +22,8 @@ const apiEndPoint = "https://www.mocky.io/v2/5c3e15e63500006e003e9795";
 const initialState = {
   products: [],
   itemPrices: {},
+  isAlertOpen: false,
+  alertContent: '',
 };
 //look into window.cache storage
 // const item_value = sessionStorage.getItem(sessionKey);
@@ -125,7 +128,8 @@ function App() {
       "selected product",
       state.products.find((item) => item.priceId === id)
     );
-
+    //scroll to form field onEdit
+    window.scrollTo(0,0);
     const editedProduct = state.products.find((item) => item.priceId === id);
     setIsEditing(true);
     setNewProduct(editedProduct);
@@ -147,6 +151,11 @@ function App() {
     });
   };
 
+  //alert 
+  const closeAlert = () => {
+    dispatch({ type: ACTIONS.CLOSE_MODAL });
+  };
+
 
   if (state.products.length < 1) return <h2>Loading ....</h2>;
 
@@ -154,6 +163,7 @@ function App() {
     <>
       <div className="container">
         <Navbar />
+        {state.isAlertOpen && <Alert alertContent={state.alertContent} closeAlert={closeAlert}/>}
         <Form handleFormSubmit={handleFormSubmit} newProduct={newProduct} handleInputChange={handleInputChange}/>
         <Modal
         open={isModalOpen}

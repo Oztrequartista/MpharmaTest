@@ -1,0 +1,25 @@
+.alert {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  border-radius: 0.25rem;
+  text-transform: capitalize;
+
+  font-size: 12px;
+}
+
+.added {
+  color: rgb(12, 138, 121);
+}
+
+.edited {
+  color: #0a0ac0;
+}
+
+.removed {
+  color: #c02626;
+}

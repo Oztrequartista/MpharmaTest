@@ -3,6 +3,7 @@ export const ACTIONS = {
     ITEM_ADDED: "ITEM_ADDED",
     ITEM_DELETED: "ITEM_DELETED",
     ITEM_EDITED: "ITEM_EDITED",
+    CLOSE_MODAL:"CLOSE_MODAL"
   };
 
   export default ACTIONS;
