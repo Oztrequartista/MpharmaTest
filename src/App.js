@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, Children } from "react";
 import reducer from "./reducer";
 import axios from "axios";
 import Navbar from "./Navbar";
@@ -12,12 +12,8 @@ import "./App.css";
 import { BsFillTrashFill, BsEyeFill } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 
-const ACTIONS = {
-  FETCH_PRODUCTS: "FETCH_PRODUCTS",
-  ITEM_ADDED: "ITEM_ADDED",
-  ITEM_DELETED: "ITEM_DELETED",
-  ITEM_EDITED: "ITEM_EDITED",
-};
+import ACTIONS from "./actions";
+import Modal from "./Modal";
 
 const sessionKey = "initial_app_state";
 const apiEndPoint = "http://www.mocky.io/v2/5c3e15e63500006e003e9795";
@@ -25,6 +21,9 @@ const initialState = {
   products: [],
   itemPrices: {},
 };
+//look into window.cache storage
+const item_value = sessionStorage.getItem(sessionKey);
+// console.log("item_value", item_value)
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -34,7 +33,8 @@ function App() {
     date: new Date().toDateString(),
   });
   const [isEditing, setIsEditing] = useState(false);
-  const [productId, setProductId] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [historicalPrices, setHistoricalPrices] = useState({name:"", prices:[]});
 
   // //initial page load
 
@@ -68,7 +68,7 @@ function App() {
   useEffect(() => {
     console.log("state of App", state);
     console.log("state of isEditing after state update", isEditing);
-    sessionStorage.setItem(sessionKey, JSON.stringify(initialState));
+    sessionStorage.setItem(sessionKey, JSON.stringify(state));
   }, [state]);
 
   //form functions
@@ -136,9 +136,9 @@ function App() {
   };
 
   const handleProductPriceHistory = (id) => {
-    console.log("id", id);
+    const selectedProduct = state.products.find((item) => item.productId === id);
     const pricesToDisplay = state.itemPrices[id];
-    console.log("pricesToDisplay", pricesToDisplay);
+    setHistoricalPrices({name:selectedProduct.name, prices: pricesToDisplay});
   };
 
   //values before rendering
@@ -153,7 +153,9 @@ function App() {
           <div className="form-container">
             <form action="" onSubmit={handleFormSubmit} className="form">
               <div className="input-container">
-                <label htmlFor="Product" style={{marginTop:"40px"}}>Product Name</label>
+                <label htmlFor="Product" style={{ marginTop: "40px" }}>
+                  Product Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -224,12 +226,12 @@ function App() {
                         onClick={(event) => {
                           event.preventDefault();
                           handleProductPriceHistory(productId);
+                          setIsModalOpen(true)
                         }}
                         className="btn tooltip"
-                        
                       >
                         <BsEyeFill color="#584c4c" size={22} />
-                        <span className="tooltiptext">View Prices</span>
+                        <span className="tooltiptext">Previous Prices</span>
                       </div>
                     </div>
                   </div>
@@ -237,9 +239,13 @@ function App() {
               })}
           </div>
         </div>
+        <Modal open={isModalOpen} onModalClose={()=> setIsModalOpen(false)} historicalPrices={historicalPrices}/>
       </div>
     </>
   );
 }
 
+
 export default App;
+
+

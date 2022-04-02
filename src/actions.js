@@ -1,0 +1,8 @@
+export const ACTIONS = {
+    FETCH_PRODUCTS: "FETCH_PRODUCTS",
+    ITEM_ADDED: "ITEM_ADDED",
+    ITEM_DELETED: "ITEM_DELETED",
+    ITEM_EDITED: "ITEM_EDITED",
+  };
+
+  export default ACTIONS;

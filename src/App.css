@@ -217,7 +217,7 @@ input:focus {
   padding: 15px;
   border-radius: 5px;
   border: none;
-  background-color: rgb(12, 138, 121);
+
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
@@ -226,10 +226,13 @@ input:focus {
   cursor: pointer;
   transition: background-color 0.5s ease-in-out;
   width: 71%;
+  /* 
+  background-color: rgb(12, 138, 121); */
+  background-color: #272121;
 }
 
 .submit:hover {
-  background-color: rgb(19 112 99);
+  background-color: #000000;
 }
 
 .tooltip {

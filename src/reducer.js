@@ -1,21 +1,22 @@
 //Reducer Function
+import ACTIONS from "./actions"
 
 const reducer = (state, action) => {
   console.log("data from form field to set to state", action.payload);
 
   switch (action.type) {
-    case "FETCH_PRODUCTS":
+    case ACTIONS.FETCH_PRODUCTS:
       const { pricesByProductKey, products } = action.payload;
       return { ...state, products, itemPrices: pricesByProductKey };
       break;
-    case "ITEM_ADDED":
+    case ACTIONS.ITEM_ADDED:
       const {
         newProduct,
         isEditing,
-        editedProduct,
       } = action.payload;
       //check if isEditing
       const  { date, name, itemPrice, productId } = newProduct;
+      const convertPriceToTwoDecimals = parseFloat(itemPrice).toFixed(2);
 
       const lastKeyinPricesObject = Object.keys(state.itemPrices).length + 1;
       const getIndexOfLastProductInState = state.products.length - 1;
@@ -30,20 +31,20 @@ const reducer = (state, action) => {
       const newItemToAdd = {
         name,
         productId: newProductId,
-        itemPrice: parseFloat(itemPrice),
+        itemPrice: convertPriceToTwoDecimals,
         priceId: increasePriceIdByOne,
         date,
         priceIdArray: [increasePriceIdByOne],
       };
       const addToPricesArray = {
-        [lastKeyinPricesObject]: [{ priceId: increasePriceIdByOne, price: parseFloat(itemPrice), date: date }],
+        [lastKeyinPricesObject]: [{ priceId: increasePriceIdByOne, price: convertPriceToTwoDecimals, date: date }],
         
       };
 
       if (isEditing) {
 
         const editPriceObj = state.itemPrices[productId];
-        const newItemPrice = {priceId: editPriceObj.length+ 1 , price: parseFloat(itemPrice), date, }
+        const newItemPrice = {priceId: editPriceObj.length+ 1 , price: convertPriceToTwoDecimals, date, }
         const newItemPrices = {
             ...state.itemPrices,
             [productId]: [...state.itemPrices[productId], newItemPrice ], 
@@ -72,7 +73,7 @@ const reducer = (state, action) => {
         };
       }
 
-    case "ITEM_DELETED":
+    case ACTIONS.ITEM_DELETED:
       const filteredProducts = state.products.filter(
         (item) => item.priceId !== action.payload
       );
