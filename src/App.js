@@ -1,28 +1,29 @@
-import React, { useState, useReducer, useEffect, Children } from "react";
-import reducer from "./reducer";
+import React, { useState, useReducer, useEffect } from "react";
 import axios from "axios";
-import Navbar from "./Navbar";
-import {
-  getLatestPriceFromProductList,
-  valuesOfAllPrices,
-  formattedDate,
-} from "./myUtils";
 
+//utilities
+import reducer from "./UtilityFunctions/reducer";
+import {getLatestPriceFromProductList, valuesOfAllPrices} from "./UtilityFunctions/myUtils";
+import ACTIONS from "./UtilityFunctions/actions";
+
+//components
+import Navbar from "./components/Navbar";
+import Modal from "./components/Modal/Modal";
+import Form from "./components/Form/Form"
+import Products from "./components/Products/Products";
+
+//styles
 import "./App.css";
-import { BsFillTrashFill, BsEyeFill } from "react-icons/bs";
-import { BiEdit } from "react-icons/bi";
 
-import ACTIONS from "./actions";
-import Modal from "./Modal";
 
 const sessionKey = "initial_app_state";
-const apiEndPoint = "http://www.mocky.io/v2/5c3e15e63500006e003e9795";
+const apiEndPoint = "https://www.mocky.io/v2/5c3e15e63500006e003e9795";
 const initialState = {
   products: [],
   itemPrices: {},
 };
 //look into window.cache storage
-const item_value = sessionStorage.getItem(sessionKey);
+// const item_value = sessionStorage.getItem(sessionKey);
 // console.log("item_value", item_value)
 
 function App() {
@@ -34,10 +35,12 @@ function App() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [historicalPrices, setHistoricalPrices] = useState({name:"", prices:[]});
+  const [historicalPrices, setHistoricalPrices] = useState({
+    name: "",
+    prices: [],
+  });
 
-  // //initial page load
-
+   //initial page load
   useEffect(() => {
     let isMounted = true;
     const fetchProducts = async () => {
@@ -65,11 +68,13 @@ function App() {
     };
   }, []);
 
+  //check value of state after each render
+
   useEffect(() => {
     console.log("state of App", state);
     console.log("state of isEditing after state update", isEditing);
     sessionStorage.setItem(sessionKey, JSON.stringify(state));
-  }, [state]);
+  }, [state, isEditing]);
 
   //form functions
 
@@ -87,8 +92,6 @@ function App() {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    const { name, itemPrice } = newProduct;
-
     //REMEMBER go add case to handle empty input values
     //add alert modal that tells user to enter a number for price and remove number field from input
 
@@ -126,8 +129,6 @@ function App() {
     const editedProduct = state.products.find((item) => item.priceId === id);
     setIsEditing(true);
     setNewProduct(editedProduct);
-
-    // dispatch({ type: ACTIONS.ITEM_EDITED, payload: {editedProduct, id, isEditing: true} });
   };
 
   const handleProductDelete = (id) => {
@@ -136,116 +137,34 @@ function App() {
   };
 
   const handleProductPriceHistory = (id) => {
-    const selectedProduct = state.products.find((item) => item.productId === id);
+    const selectedProduct = state.products.find(
+      (item) => item.productId === id
+    );
     const pricesToDisplay = state.itemPrices[id];
-    setHistoricalPrices({name:selectedProduct.name, prices: pricesToDisplay});
+    setHistoricalPrices({
+      name: selectedProduct.name,
+      prices: pricesToDisplay,
+    });
   };
 
-  //values before rendering
-  const { name, itemPrice } = newProduct;
+
   if (state.products.length < 1) return <h2>Loading ....</h2>;
 
   return (
     <>
-      <div>
+      <div className="container">
         <Navbar />
-        <div className="container">
-          <div className="form-container">
-            <form action="" onSubmit={handleFormSubmit} className="form">
-              <div className="input-container">
-                <label htmlFor="Product" style={{ marginTop: "40px" }}>
-                  Product Name
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={handleInputChange}
-                  required
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleFormSubmit();
-                    }
-                  }}
-                />
-              </div>
-
-              <div className="input-container">
-                <label htmlFor="Product">Price</label>
-                <input
-                  type=""
-                  name="itemPrice"
-                  value={itemPrice}
-                  onChange={handleInputChange}
-                  required
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleFormSubmit();
-                    }
-                  }}
-                />
-              </div>
-
-              <button className="submit">Add Product</button>
-            </form>
-          </div>
-
-          <div className="product-container">
-            {state.products.length &&
-              state.products.map((singleProduct, index) => {
-                const { itemPrice, name, date, priceId, productId } =
-                  singleProduct;
-                const dateAsString = formattedDate(date);
-                return (
-                  <div key={priceId} className="product">
-                    <h2 className="name">{name.toLowerCase()}</h2>
-                    <button className="price">GHS {itemPrice}</button>
-                    <h4 className="date">{dateAsString}</h4>
-                    <div className="btn-container">
-                      <div
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleEditAndAdd(priceId);
-                        }}
-                        className="btn tooltip"
-                      >
-                        <BiEdit color="#0a0ac0" size={22} />
-                        <span className="tooltiptext">Edit Product</span>
-                      </div>
-                      <div
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleProductDelete(priceId);
-                        }}
-                        className="btn tooltip"
-                      >
-                        <BsFillTrashFill color="#c02626" size={22} />
-                        <span className="tooltiptext">Delete Product</span>
-                      </div>
-                      <div
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleProductPriceHistory(productId);
-                          setIsModalOpen(true)
-                        }}
-                        className="btn tooltip"
-                      >
-                        <BsEyeFill color="#584c4c" size={22} />
-                        <span className="tooltiptext">Previous Prices</span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-        <Modal open={isModalOpen} onModalClose={()=> setIsModalOpen(false)} historicalPrices={historicalPrices}/>
+        <Form handleFormSubmit={handleFormSubmit} newProduct={newProduct} handleInputChange={handleInputChange}/>
+        <Modal
+        open={isModalOpen}
+        onModalClose={() => setIsModalOpen(false)}
+        historicalPrices={historicalPrices}
+      />
+      <Products state={state} handleEditAndAdd={handleEditAndAdd} handleProductDelete={handleProductDelete} handleProductPriceHistory={handleProductPriceHistory} setIsModalOpen={setIsModalOpen}/>
       </div>
+     
     </>
   );
 }
 
-
 export default App;
-
-

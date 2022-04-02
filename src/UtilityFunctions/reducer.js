@@ -14,7 +14,8 @@ const reducer = (state, action) => {
         newProduct,
         isEditing,
       } = action.payload;
-      //check if isEditing
+      
+      //create config for state updates
       const  { date, name, itemPrice, productId } = newProduct;
       const convertPriceToTwoDecimals = parseFloat(itemPrice).toFixed(2);
 
@@ -40,7 +41,7 @@ const reducer = (state, action) => {
         [lastKeyinPricesObject]: [{ priceId: increasePriceIdByOne, price: convertPriceToTwoDecimals, date: date }],
         
       };
-
+      // adding has two functionalities so check if isEditing is true to update state else add new product to state
       if (isEditing) {
 
         const editPriceObj = state.itemPrices[productId];
@@ -58,9 +59,8 @@ const reducer = (state, action) => {
           itemPrices: newItemPrices,
         };
       } else {
+        
         //find lastItem in product array and last item in productId array and add new item to state
-
-  
         console.log("newItemToAdd", newItemToAdd);
         console.log("addToPricesArray", addToPricesArray);
         const newPriceObject = { ...state.itemPrices, ...addToPricesArray };

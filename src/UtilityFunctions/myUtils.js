@@ -1,9 +1,4 @@
-//refactored utility functions used
-
-
-
-
-export const sortedPrices = (array, name) => {
+ const sortedPrices = (array, name) => {
   //sort dates by prices
   const sorted = array.sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -16,21 +11,7 @@ export const sortedPrices = (array, name) => {
   return convertDates;
 };
 
-// export const valuesOfAllPrices = (array, key) => {
-//   const initialValue = {};
-//   return array.reduce((object, arrayItem) => {
-//     const sortedPricesByDates = sortedPrices(arrayItem.prices, arrayItem.name);
-//     return {
-//       ...object,
-//       [arrayItem[key]]: {
-//         [arrayItem.name]: sortedPricesByDates,
-//       },
-//     };
-//   }, initialValue);
-// };
-
-
-export const valuesOfAllPrices = (array, key) => {
+ const valuesOfAllPrices = (array, key) => {
   const initialValue = {};
   return array.reduce((object, arrayItem) => {
     const sortedPricesByDates = sortedPrices(arrayItem.prices, arrayItem.name);
@@ -42,7 +23,7 @@ export const valuesOfAllPrices = (array, key) => {
   }, initialValue);
 };
 
-export const getLatestPriceFromProductList = (array) => {
+ const getLatestPriceFromProductList = (array) => {
   return array.map((item, index) => {
     const sorted = sortedPrices(item.prices);
     //last Index of Price after sorting by dates points to the current price
@@ -58,19 +39,8 @@ export const getLatestPriceFromProductList = (array) => {
   });
 };
 
-//function to group prices as one object from fetched products
-// export const valuesOfAllPrices = (array, key) => {
-//   const initialValue = {};
-//   return array.reduce((object, arrayItem) => {
-//     const sortedPricesByDates = sortedPrices(arrayItem.prices, arrayItem.name);
-//     return {
-//       ...object,
-//       [arrayItem[key]]: sortedPricesByDates,
-//     };
-//   }, initialValue);
-// };
-
-export const formattedDate = (date) => {
+ const formattedDate = (date) => {
   return new Date(date).toDateString();
 };
 
+export {sortedPrices, valuesOfAllPrices, getLatestPriceFromProductList, formattedDate}
