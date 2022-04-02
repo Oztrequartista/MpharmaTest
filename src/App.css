@@ -4,21 +4,10 @@ body {
   background-color: #dad9d9ea;
   font-family: sans-serif;
 }
-.form-container {
-  height: 300px;
-  border: 1px solid red;
-}
-.product-container {
-  /* width: 60%;
-  border: 1px solid red;
-  height: auto;
-  margin: 10% auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px; */
 
-  width: 60%;
-  margin: auto;
+.product-container {
+  /* width: 60%; */
+  margin: 60px auto;
   margin-bottom: 40px;
   margin-top: 20px;
   display: flex;
@@ -26,9 +15,24 @@ body {
   flex-wrap: wrap;
   justify-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
+  .form-container {
+    width: 100%;
+    /* border: 1px solid red; */
+  }
+  .product-container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 969px) {
+  /* .form-container {
+      width: 100%;
+  
+    } */
   .product-container {
     width: 100%;
   }
@@ -47,6 +51,69 @@ body {
     width: 290px;
     height: 250px;
   }
+
+  .form-container {
+    width: 350px;
+    margin: auto;
+  }
+
+  .form {
+    width: 100% !important;
+  }
+
+  .input-container {
+    width: 80% !important;
+    /* height: 60px !important; */
+  }
+
+  .submit {
+    width: 80% !important;
+  }
+}
+
+@media (max-width: 376px) {
+  .form-container {
+    width: 320px;
+    margin: auto;
+  }
+
+  .form {
+    width: 100% !important;
+  }
+
+  /* .form {
+      width: 100%;
+    } */
+}
+
+@media (max-width: 290px) {
+  .form-container {
+    width: 250px;
+    margin: auto;
+  }
+
+  .form {
+    width: 100% !important;
+  }
+
+  .product {
+    width: 90%;
+  }
+}
+
+@media (max-width: 580px) {
+  /* .form-container {
+    width: 80% !important;
+    margin: auto;
+  } */
+
+  /* .form {
+    width: 100% !important;
+  }
+
+  .product {
+    width: 100%;
+  } */
 }
 
 /* @media only screen and (max-width: 500px) {
@@ -57,8 +124,7 @@ body {
 
 .name {
   /* color: #097e8dfa; */
-  font-size: 25px;
-  /* font-size: 25px; */
+  font-size: 20px;
   margin-top: 40px;
   font-weight: 600;
   text-transform: capitalize;
@@ -70,7 +136,7 @@ body {
   background-color: rgb(12, 138, 121);
   color: #ffffff;
   width: 150px;
-  cursor: pointer;
+
   height: 38px;
   font-size: 13px;
   font-weight: 600;
@@ -90,4 +156,118 @@ body {
 
 .btn-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  cursor: pointer;
+  margin: 0 3px;
+}
+
+.form-container {
+  height: 380px;
+  /* border: 1px solid red; */
+}
+
+.form {
+  height: 100%;
+  /* border: 1px solid red; */
+  /* width: 40%; */
+  margin: auto;
+  background: #fff;
+  width: 562px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.input-container {
+  /* border: 1px solid red; */
+  /* width: 60%; */
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+}
+
+label {
+  text-align: center;
+  line-height: 2.4;
+  color: #584c4c;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+input {
+  /* padding: 12px; */
+  border-radius: 5px;
+  border: none;
+  border: 1px solid #dad9d9ea;
+  background-color: #f8fbf7cf;
+  padding: 16px;
+}
+
+input:focus {
+  outline: 1px solid #584c4c;
+}
+
+.submit {
+  /* width: 60%; */
+  display: block;
+  margin: 30px auto;
+  padding: 15px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgb(12, 138, 121);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: capitalize;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.5s ease-in-out;
+  width: 71%;
+}
+
+.submit:hover {
+  background-color: rgb(19 112 99);
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  color: #006080;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 100px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: small;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }

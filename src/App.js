@@ -9,6 +9,8 @@ import {
 } from "./myUtils";
 
 import "./App.css";
+import { BsFillTrashFill, BsEyeFill } from "react-icons/bs";
+import { BiEdit } from "react-icons/bi";
 
 const ACTIONS = {
   FETCH_PRODUCTS: "FETCH_PRODUCTS",
@@ -149,23 +151,39 @@ function App() {
         <Navbar />
         <div className="container">
           <div className="form-container">
-            <form action="" onSubmit={handleFormSubmit}>
-              <label htmlFor="Product">Product Name</label>
-              <input
-                type="text"
-                name="name"
-                value={name}
-                onChange={handleInputChange}
-                required
-              />
-              <label htmlFor="Product">Price</label>
-              <input
-                type=""
-                name="itemPrice"
-                value={itemPrice}
-                onChange={handleInputChange}
-                required
-              />
+            <form action="" onSubmit={handleFormSubmit} className="form">
+              <div className="input-container">
+                <label htmlFor="Product" style={{marginTop:"40px"}}>Product Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={name}
+                  onChange={handleInputChange}
+                  required
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleFormSubmit();
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="input-container">
+                <label htmlFor="Product">Price</label>
+                <input
+                  type=""
+                  name="itemPrice"
+                  value={itemPrice}
+                  onChange={handleInputChange}
+                  required
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleFormSubmit();
+                    }
+                  }}
+                />
+              </div>
+
               <button className="submit">Add Product</button>
             </form>
           </div>
@@ -178,34 +196,41 @@ function App() {
                 const dateAsString = formattedDate(date);
                 return (
                   <div key={priceId} className="product">
-                    <h2 className="name">{name}</h2>
+                    <h2 className="name">{name.toLowerCase()}</h2>
                     <button className="price">GHS {itemPrice}</button>
                     <h4 className="date">{dateAsString}</h4>
                     <div className="btn-container">
-                      <button
+                      <div
                         onClick={(event) => {
                           event.preventDefault();
                           handleEditAndAdd(priceId);
                         }}
+                        className="btn tooltip"
                       >
-                        Edit Product
-                      </button>
-                      <button
+                        <BiEdit color="#0a0ac0" size={22} />
+                        <span className="tooltiptext">Edit Product</span>
+                      </div>
+                      <div
                         onClick={(event) => {
                           event.preventDefault();
                           handleProductDelete(priceId);
                         }}
+                        className="btn tooltip"
                       >
-                        Delete Product
-                      </button>
-                      <button
+                        <BsFillTrashFill color="#c02626" size={22} />
+                        <span className="tooltiptext">Delete Product</span>
+                      </div>
+                      <div
                         onClick={(event) => {
                           event.preventDefault();
                           handleProductPriceHistory(productId);
                         }}
+                        className="btn tooltip"
+                        
                       >
-                        Price History
-                      </button>
+                        <BsEyeFill color="#584c4c" size={22} />
+                        <span className="tooltiptext">View Prices</span>
+                      </div>
                     </div>
                   </div>
                 );
