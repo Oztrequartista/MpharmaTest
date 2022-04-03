@@ -115,6 +115,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         isAlertOpen: false,
+        alertContent:'',
       };
       break;
 

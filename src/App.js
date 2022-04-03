@@ -12,6 +12,7 @@ import Modal from "./components/Modal/Modal";
 import Form from "./components/Form/Form"
 import Products from "./components/Products/Products";
 import Alert from "./components/Alert";
+import Loader from "./components/Loader/Loader"
 
 //styles
 import "./App.css";
@@ -133,6 +134,7 @@ function App() {
     const editedProduct = state.products.find((item) => item.priceId === id);
     setIsEditing(true);
     setNewProduct(editedProduct);
+   // dispatch({ type: ACTIONS.ITEM_EDITED, payload: editedProduct });
   };
 
   const handleProductDelete = (id) => {
@@ -157,7 +159,7 @@ function App() {
   };
 
 
-  if (state.products.length < 1) return <h2>Loading ....</h2>;
+  if (state.products.length < 1) return <Loader text="loading..."/>;
 
   return (
     <>

@@ -8,8 +8,6 @@ const Alert = ({ alertContent, closeAlert = () => {} }) => {
     ? "edited"
     : "removed";
 
-console.log("alertClass", alertClass)
-
     useEffect(() => {
       setTimeout(() => {
         closeAlert();
