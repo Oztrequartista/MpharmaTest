@@ -1,13 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./Modal.css";
+import "./tablemodal.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 //used react portal to display a child into a DOM node that exists outside the DOM hierarchy of the parent component
-
-const modalStyles = {
- 
-};
 
 const overlayStyle = {
   position: "fixed",
@@ -19,8 +15,7 @@ const overlayStyle = {
   zIndex: "1000",
   transition: ".5s ease",
 };
-const Modal = ({ open, onModalClose, historicalPrices }) => {
-//   console.log("historicalPrices", historicalPrices);
+const TableModal = ({ open, onModalClose, historicalPrices }) => {
   const {name, prices} = historicalPrices;
   if (!open) return null;
   return ReactDOM.createPortal(
@@ -33,15 +28,17 @@ const Modal = ({ open, onModalClose, historicalPrices }) => {
           </div>
           <div>
             {prices.map((item) => {
-              const { date, priceId, price } = item;
+              const { date, priceId, price, } = item;
               // return <div>{date}</div>
               return (
                 <table key={priceId}>
                   <tr>
+                    
                     <th>Date</th>
                     <th>Price</th>
                   </tr>
                   <tr>
+                   
                     <td>{date}</td>
                     <td> GHS {price}</td>
                   </tr>
@@ -56,4 +53,4 @@ const Modal = ({ open, onModalClose, historicalPrices }) => {
   );
 };
 
-export default Modal;
+export default TableModal;

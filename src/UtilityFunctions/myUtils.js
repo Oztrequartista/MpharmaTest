@@ -7,6 +7,8 @@
     priceId: item.id,
     price: item.price,
     date: new Date(item.date).toDateString(),
+    name:name,
+    
   }));
   return convertDates;
 };

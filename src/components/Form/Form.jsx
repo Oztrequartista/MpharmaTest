@@ -11,6 +11,7 @@ const Form = ({handleFormSubmit=()=>{}, newProduct, handleInputChange=()=>{}}) =
             Product Name
           </label>
           <input
+           placeholder="product"
             type="text"
             name="name"
             value={name}
@@ -27,7 +28,8 @@ const Form = ({handleFormSubmit=()=>{}, newProduct, handleInputChange=()=>{}}) =
         <div className="input-container">
           <label htmlFor="Product">Price</label>
           <input
-            type=""
+             placeholder="price"
+            type="text"
             name="itemPrice"
             value={itemPrice}
             onChange={handleInputChange}

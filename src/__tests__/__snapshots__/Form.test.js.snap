@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form.js should successfully add a product 1`] = `
+<body>
+  <div>
+    <div
+      class="form-container"
+    >
+      <form
+        action=""
+        class="form"
+      >
+        <div
+          class="input-container"
+        >
+          <label
+            for="Product"
+            style="margin-top: 40px;"
+          >
+            Product Name
+          </label>
+          <input
+            name="name"
+            placeholder="product"
+            required=""
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          class="input-container"
+        >
+          <label
+            for="Product"
+          >
+            Price
+          </label>
+          <input
+            name="itemPrice"
+            placeholder="price"
+            required=""
+            type="text"
+            value=""
+          />
+        </div>
+        <button
+          class="submit"
+        >
+          Add Product
+        </button>
+      </form>
+    </div>
+  </div>
+</body>
+`;

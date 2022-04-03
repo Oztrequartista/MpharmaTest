@@ -29,6 +29,7 @@ const Products = ({
                     handleEditAndAdd(priceId);
                   }}
                   className="btn tooltip"
+                  data-testid ="edit"
                 >
                   <BiEdit color="#0a0ac0" size={22} />
                   <span className="tooltiptext">Edit Product</span>
@@ -39,6 +40,7 @@ const Products = ({
                     handleProductDelete(priceId);
                   }}
                   className="btn tooltip"
+                  data-testid ="filter"
                 >
                   <BsFillTrashFill color="#c02626" size={22} />
                   <span className="tooltiptext">Delete Product</span>
@@ -50,6 +52,7 @@ const Products = ({
                     setIsModalOpen(true);
                   }}
                   className="btn tooltip"
+                  data-testid ="view"
                 >
                   <BsEyeFill color="#584c4c" size={22} />
                   <span className="tooltiptext">Previous Prices</span>

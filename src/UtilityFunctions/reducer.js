@@ -54,9 +54,12 @@ const reducer = (state, action) => {
             priceId: setNewPriceID,
             price: priceValueToBeAddedToState,
             date: date,
+            name,
           },
         ],
       };
+
+      console.log("newPriceObjectToAddToItemPricesState", newPriceObjectToAddToItemPricesState)
 
       // NB Add Button has multiple cases :->
 
@@ -76,6 +79,7 @@ const reducer = (state, action) => {
           priceId: setNewPriceID,
           price: priceValueToBeAddedToState,
           date,
+          name,
         };
         const newItemPrices = {
           ...state.itemPrices,

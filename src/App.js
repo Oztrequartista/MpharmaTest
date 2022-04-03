@@ -3,26 +3,24 @@ import axios from "axios";
 
 //utilities
 import reducer from "./UtilityFunctions/reducer";
-import {getLatestPriceFromProductList, valuesOfAllPrices} from "./UtilityFunctions/myUtils";
+import {
+  getLatestPriceFromProductList,
+  valuesOfAllPrices,
+} from "./UtilityFunctions/myUtils";
 import ACTIONS from "./UtilityFunctions/actions";
 
 //components
-import Navbar from "./components/Navbar";
-import Modal from "./components/Modal/Modal";
-import Form from "./components/Form/Form"
+import Navbar from "./components/Navbar/Navbar";
+import TableModal from "./components/TableModal/TableModal";
+import Form from "./components/Form/Form";
 import Products from "./components/Products/Products";
 import Alert from "./components/Alert";
-import Loader from "./components/Loader/Loader"
+import Loader from "./components/Loader/Loader";
 
 //styles
 import "./App.css";
 
-
 const sessionKey = "initial_app_state";
-//look into window.cache storage
-// const item_value = sessionStorage.getItem(sessionKey);
-// console.log("item_value", item_value)
-
 
 
 const apiEndPoint = "https://www.mocky.io/v2/5c3e15e63500006e003e9795";
@@ -30,7 +28,7 @@ const initialState = {
   products: [],
   itemPrices: {},
   isAlertOpen: false,
-  alertContent: '',
+  alertContent: "",
   isLoading: false,
 };
 
@@ -48,11 +46,21 @@ function App() {
     prices: [],
   });
 
-   //initial page load
+  //initial page load
   useEffect(() => {
-    dispatch({type:ACTIONS.LOADING})
+    dispatch({ type: ACTIONS.LOADING });
     let isMounted = true;
     const fetchProducts = async () => {
+      const item_value = localStorage.getItem(sessionKey);
+     
+     if (item_value){
+       const {itemPrices : pricesByProductKey, products } = JSON.parse(item_value);
+      dispatch({
+        type: ACTIONS.FETCH_PRODUCTS,
+        payload: { pricesByProductKey, products },
+      });
+      return ;
+     }
       const response = await axios.get(apiEndPoint);
       const data = await response.data;
       const productList = data.products;
@@ -70,6 +78,7 @@ function App() {
         });
       }
     };
+
     fetchProducts().catch(console.error);
 
     return () => {
@@ -79,9 +88,7 @@ function App() {
 
   //check value of state after each render
   useEffect(() => {
-    console.log("state of App", state);
-    console.log("state of isEditing after state update", isEditing);
-    sessionStorage.setItem(sessionKey, JSON.stringify(state));
+    localStorage.setItem(sessionKey, JSON.stringify(state));
   }, [state, isEditing]);
 
   //form functions
@@ -112,7 +119,7 @@ function App() {
 
   const handleEditAndAdd = (id) => {
     //scroll to form field on Edit
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     const editedProduct = state.products.find((item) => item.priceId === id);
     setIsEditing(true);
     setNewProduct(editedProduct);
@@ -134,28 +141,38 @@ function App() {
     });
   };
 
-  //Alert 
+  //Alert
   const closeAlert = () => {
     dispatch({ type: ACTIONS.CLOSE_MODAL });
   };
 
-
-  if (state.isLoading) return <Loader text="loading..."/>;
+  if (state.isLoading) return <Loader text="loading..." />;
 
   return (
     <>
       <div className="container">
         <Navbar />
-        {state.isAlertOpen && <Alert alertContent={state.alertContent} closeAlert={closeAlert}/>}
-        <Form handleFormSubmit={handleFormSubmit} newProduct={newProduct} handleInputChange={handleInputChange}/>
-        <Modal
-        open={isModalOpen}
-        onModalClose={() => setIsModalOpen(false)}
-        historicalPrices={historicalPrices}
-      />
-      <Products state={state} handleEditAndAdd={handleEditAndAdd} handleProductDelete={handleProductDelete} handleProductPriceHistory={handleProductPriceHistory} setIsModalOpen={setIsModalOpen}/>
+        {state.isAlertOpen && (
+          <Alert alertContent={state.alertContent} closeAlert={closeAlert} />
+        )}
+        <Form
+          handleFormSubmit={handleFormSubmit}
+          newProduct={newProduct}
+          handleInputChange={handleInputChange}
+        />
+        <TableModal
+          open={isModalOpen}
+          onModalClose={() => setIsModalOpen(false)}
+          historicalPrices={historicalPrices}
+        />
+        <Products
+          state={state}
+          handleEditAndAdd={handleEditAndAdd}
+          handleProductDelete={handleProductDelete}
+          handleProductPriceHistory={handleProductPriceHistory}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
-     
     </>
   );
 }
