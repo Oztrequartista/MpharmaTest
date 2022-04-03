@@ -18,7 +18,7 @@ const Products = ({
           const { itemPrice, name, date, priceId, productId } = singleProduct;
           const dateAsString = formattedDate(date);
           return (
-            <div key={priceId} className="product">
+            <div key={index} className="product">
               <h2 className="name">{name.toLowerCase()}</h2>
               <button className="price">GHS {itemPrice}</button>
               <h4 className="date">{dateAsString}</h4>

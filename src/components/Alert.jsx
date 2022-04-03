@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import "./alert.css";
 
 const Alert = ({ alertContent, closeAlert = () => {} }) => {
-  const alertClass = alertContent.includes("Added")
+  const alertClass = alertContent.includes("added")
     ? "added"
-    : alertContent.includes("Edited")
+    : alertContent.includes("changed")
     ? "edited"
     : "removed";
 

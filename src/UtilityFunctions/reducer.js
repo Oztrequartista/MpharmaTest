@@ -2,7 +2,7 @@
 import ACTIONS from "./actions";
 
 const reducer = (state, action) => {
-  console.log("data from form field to set to state", action.payload);
+  console.log("data from form field to be set to state", action.payload);
 
   switch (action.type) {
     case ACTIONS.FETCH_PRODUCTS:
@@ -12,41 +12,55 @@ const reducer = (state, action) => {
     case ACTIONS.ITEM_ADDED:
       const { newProduct, isEditing } = action.payload;
 
-      //create config for state updates
       const { date, name, itemPrice, productId } = newProduct;
+
+      
+      //CREATE CONFIG FOR STATE UPDATES
+
+    
       const priceValueToBeAddedToState = parseFloat(itemPrice);
 
+      //find last price id
+      const lastPriceID = Object.values(state.itemPrices).flat();
+      const sortedPriceIdlast = lastPriceID.sort(
+        (a, b) => a.priceId - b.priceId
+      );
+      const setPriceId =
+        sortedPriceIdlast[sortedPriceIdlast.length - 1].priceId + 1;
+
+      //find last product id
+      const sortedProductIDlist = state.products.sort(
+        (a, b) => a.productId - b.productId
+      );
+      const setProductID =
+        sortedProductIDlist[sortedProductIDlist.length - 1].productId + 1;
+
+      //find last key in itemPricesState Object
       const lastKeyinPricesObject = Object.keys(state.itemPrices).length + 1;
-      const getIndexOfLastProductInState = state.products.length - 1;
-      const lastItemInProductList =
-        state.products[getIndexOfLastProductInState];
-      const indexOfLastItemInList =
-        lastItemInProductList.priceIdArray.length - 1;
-      const lastPriceId =
-        lastItemInProductList.priceIdArray[indexOfLastItemInList];
-      const increasePriceIdByOne = lastPriceId + 1;
-      const newProductId = lastKeyinPricesObject;
-      const newItemToAdd = {
+
+      //createNew product to add to state.products
+      const newProductToAddToProductState = {
         name,
-        productId: newProductId,
+        productId: setProductID,
         itemPrice: priceValueToBeAddedToState,
-        priceId: increasePriceIdByOne,
+        priceId: setPriceId,
         date,
-        priceIdArray: [increasePriceIdByOne],
+        priceIdArray: [setPriceId],
       };
-      const addToPricesArray = {
+      //createNew priceObject to add to state.itemPrices
+      const newPriceObjectToAddToItemPricesState = {
         [lastKeyinPricesObject]: [
           {
-            priceId: increasePriceIdByOne,
+            priceId: setPriceId,
             price: priceValueToBeAddedToState,
             date: date,
           },
         ],
       };
 
-      // add has multiple functionalities :->
+      // NB Add Button has multiple cases :->
 
-      //check if price value from price field is a number and throw alert 
+      // 1: check if price value from price field is a number else throw error alert
       if (isNaN(priceValueToBeAddedToState)) {
         return {
           ...state,
@@ -55,12 +69,11 @@ const reducer = (state, action) => {
         };
       }
 
-      // check if isEditing is true to update state else add new product to state
-      
+      //2:  check if isEditing is true before state update
+
       if (isEditing) {
-        const editPriceObj = state.itemPrices[productId];
         const newItemPrice = {
-          priceId: editPriceObj.length + 1,
+          priceId: setPriceId,
           price: priceValueToBeAddedToState,
           date,
         };
@@ -68,46 +81,55 @@ const reducer = (state, action) => {
           ...state.itemPrices,
           [productId]: [...state.itemPrices[productId], newItemPrice],
         };
-        console.log("EDITING IS BEING CALLED", newItemPrices);
-
         const editedProducts = state.products.map((item, index) =>
           item.productId === productId ? newProduct : item
         );
+        //edge case for when item is deleted while being edited : -> find deleted product
+        const whenSelectedProductedIsDeletedWhileBeingEdited =
+          state.products.find((item) => item.productId === productId);
+
+        //if the above is undefined, go ahead and add new product to state.products and use edited products
         return {
           ...state,
-          products: editedProducts,
+          products:
+            whenSelectedProductedIsDeletedWhileBeingEdited === undefined
+              ? [...state.products, newProductToAddToProductState]
+              : editedProducts,
           itemPrices: newItemPrices,
           isAlertOpen: true,
-          alertContent: "Product has been Edited",
+          alertContent: `Product has been changed to ${name}`,
         };
       } else {
-        //find lastItem in product array and last item in productId array and add new item to state
-        console.log("newItemToAdd", newItemToAdd);
-        console.log("addToPricesArray", addToPricesArray);
-        const newPriceObject = { ...state.itemPrices, ...addToPricesArray };
-        //   console.log("normalizedPricesObject", state.itemPrices);
-        //   console.log("state products list", state.products);
+        // if price is a number and item is not being edited, just add your new product to state.products
+
+        const newPriceObject = {
+          ...state.itemPrices,
+          ...newPriceObjectToAddToItemPricesState,
+        };
         return {
           ...state,
-          products: [...state.products, newItemToAdd],
+          products: [...state.products, newProductToAddToProductState],
           itemPrices: newPriceObject,
           isAlertOpen: true,
-          alertContent: "Product has been Added",
+          alertContent: `${name} has been added to list of products !`,
         };
       }
 
     case ACTIONS.ITEM_DELETED:
-      const filteredProducts = state.products.filter(
+      //filter deleted product
+      const deletedProduct = state.products.filter(
+        (item) => item.priceId === action.payload
+      );
+
+      const productsAfterDeletingOne = state.products.filter(
         (item) => item.priceId !== action.payload
       );
-      //   console.log("filteredProducts", filteredProducts);
-      //   console.log("normalizedPricesObject", state.itemPrices);
-      //   console.log("state products list", state.products);
+
       return {
         ...state,
-        products: filteredProducts,
+        products: productsAfterDeletingOne,
         isAlertOpen: true,
-        alertContent: "Product has been Removed",
+        alertContent: `${deletedProduct[0].name} has been removed from products !`,
       };
       break;
 
@@ -115,7 +137,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         isAlertOpen: false,
-        alertContent:'',
+        alertContent: "",
       };
       break;
 
