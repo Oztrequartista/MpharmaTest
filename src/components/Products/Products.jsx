@@ -13,7 +13,7 @@ const Products = ({
 }) => {
   return (
     <div className="product-container">
-      {state.products.length &&
+      {state.products.length > 0 &&
         state.products.map((singleProduct, index) => {
           const { itemPrice, name, date, priceId, productId } = singleProduct;
           const dateAsString = formattedDate(date);

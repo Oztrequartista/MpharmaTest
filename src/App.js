@@ -19,16 +19,20 @@ import "./App.css";
 
 
 const sessionKey = "initial_app_state";
+//look into window.cache storage
+// const item_value = sessionStorage.getItem(sessionKey);
+// console.log("item_value", item_value)
+
+
+
 const apiEndPoint = "https://www.mocky.io/v2/5c3e15e63500006e003e9795";
 const initialState = {
   products: [],
   itemPrices: {},
   isAlertOpen: false,
   alertContent: '',
+  isLoading: false,
 };
-//look into window.cache storage
-// const item_value = sessionStorage.getItem(sessionKey);
-// console.log("item_value", item_value)
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -46,6 +50,7 @@ function App() {
 
    //initial page load
   useEffect(() => {
+    dispatch({type:ACTIONS.LOADING})
     let isMounted = true;
     const fetchProducts = async () => {
       const response = await axios.get(apiEndPoint);
@@ -73,7 +78,6 @@ function App() {
   }, []);
 
   //check value of state after each render
-
   useEffect(() => {
     console.log("state of App", state);
     console.log("state of isEditing after state update", isEditing);
@@ -81,9 +85,7 @@ function App() {
   }, [state, isEditing]);
 
   //form functions
-
   const handleInputChange = (event) => {
-    //remember to add alert that tells user to type a number in the itemPrice input field
     const name = event.target.name;
     const value = event.target.value;
     const date = new Date().toDateString();
@@ -96,22 +98,6 @@ function App() {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    //REMEMBER go add case to handle empty input values
-    //add alert modal that tells user to enter a number for price and remove number field from input
-
-    // if (name.length && itemPrice.length) {
-    //   dispatch({ type: ACTIONS.ITEM_ADDED, payload: newProduct });
-    //   setNewProduct({
-    //     name: "",
-    //     itemPrice: "",
-    //     date: new Date().toDateString(),
-    //   });
-    // } else {
-    //   alert("enter valid inputs");
-    // }
-
-    // isEditing:isEditing
-
     dispatch({
       type: ACTIONS.ITEM_ADDED,
       payload: { newProduct, isEditing: isEditing },
@@ -125,16 +111,11 @@ function App() {
   };
 
   const handleEditAndAdd = (id) => {
-    console.log(
-      "selected product",
-      state.products.find((item) => item.priceId === id)
-    );
-    //scroll to form field onEdit
+    //scroll to form field on Edit
     window.scrollTo(0,0);
     const editedProduct = state.products.find((item) => item.priceId === id);
     setIsEditing(true);
     setNewProduct(editedProduct);
-   // dispatch({ type: ACTIONS.ITEM_EDITED, payload: editedProduct });
   };
 
   const handleProductDelete = (id) => {
@@ -153,13 +134,13 @@ function App() {
     });
   };
 
-  //alert 
+  //Alert 
   const closeAlert = () => {
     dispatch({ type: ACTIONS.CLOSE_MODAL });
   };
 
 
-  if (state.products.length < 1) return <Loader text="loading..."/>;
+  if (state.isLoading) return <Loader text="loading..."/>;
 
   return (
     <>

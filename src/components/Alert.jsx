@@ -4,7 +4,7 @@ import "./alert.css";
 const Alert = ({ alertContent, closeAlert = () => {} }) => {
   const alertClass = alertContent.includes("added")
     ? "added"
-    : alertContent.includes("changed")
+    : alertContent.includes("current")
     ? "edited"
     : "removed";
 
