@@ -52,7 +52,7 @@ const reducer = (state, action) => {
       };
 
     
-      if (isNaN(priceValueToBeAddedToState)) {
+      if (isNaN(priceValueToBeAddedToState) || priceValueToBeAddedToState < 0) {
         return {
           ...state,
           isAlertOpen: true,
