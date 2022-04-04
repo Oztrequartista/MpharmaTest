@@ -10,12 +10,13 @@ import {
 import ACTIONS from "./UtilityFunctions/actions";
 
 //components
-import Navbar from "./components/Navbar/Navbar";
+import Inventory from "./components/Inventory/Inventory";
 import TableModal from "./components/TableModal/TableModal";
 import Form from "./components/Form/Form";
 import Products from "./components/Products/Products";
 import Alert from "./components/Alert";
 import Loader from "./components/Loader/Loader";
+import NavBar from "./components/NavBar/NavBar";
 
 //styles
 import "./App.css";
@@ -45,6 +46,8 @@ function App() {
     name: "",
     prices: [],
   });
+
+  const [isInventoryOpen, setIsInventoryOpen] = useState(false);
 
   //initial page load
   useEffect(() => {
@@ -126,7 +129,7 @@ function App() {
   };
 
   const handleProductDelete = (id) => {
-    console.log("product ID", id);
+    window.scrollTo(0, 0);
     dispatch({ type: ACTIONS.ITEM_DELETED, payload: id });
   };
 
@@ -146,12 +149,18 @@ function App() {
     dispatch({ type: ACTIONS.CLOSE_MODAL });
   };
 
+  const onInventoryClose =()=>{
+    setIsInventoryOpen(false)
+  }
+
   if (state.isLoading) return <Loader text="loading..." />;
 
   return (
     <>
       <div className="container">
-        <Navbar />
+        <NavBar setIsInventoryOpen={setIsInventoryOpen}/>
+        <Inventory inventory={state.itemPrices} open={isInventoryOpen} onInventoryClose={onInventoryClose}/>
+       
         {state.isAlertOpen && (
           <Alert alertContent={state.alertContent} closeAlert={closeAlert} />
         )}

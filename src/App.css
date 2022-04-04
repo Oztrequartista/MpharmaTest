@@ -5,6 +5,10 @@ body {
   font-family: sans-serif;
 }
 
+.container {
+  width: 100%;
+}
+
 .product-container {
   /* width: 60%; */
   margin: 60px auto;
@@ -19,14 +23,20 @@ body {
 }
 
 @media (max-width: 768px) {
-  .product-container {
+  .container {
     width: 100%;
+  }
+  .product-container {
+    width: 90%;
   }
 }
 
 @media (max-width: 969px) {
-  .product-container {
+  .container {
     width: 100%;
+  }
+  .product-container {
+    width: 90%;
   }
 }
 
@@ -39,6 +49,9 @@ body {
 }
 
 @media (max-width: 468px) {
+  .container {
+    width: 100%;
+  }
   .profile-card {
     width: 290px;
     height: 250px;
@@ -46,8 +59,11 @@ body {
 }
 
 @media (max-width: 290px) {
+  .container {
+    width: 100%;
+  }
   .product {
-    width: 90%;
+    width: 80%;
   }
 }
 
@@ -58,6 +74,7 @@ body {
   text-transform: capitalize;
   text-align: center;
   color: rgb(12, 172, 150);
+  word-wrap: break-word;
 }
 
 .price {

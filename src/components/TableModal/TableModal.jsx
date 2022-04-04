@@ -22,11 +22,11 @@ const TableModal = ({ open, onModalClose, historicalPrices }) => {
     <>
       <div style={overlayStyle}>
         <div className="modal-styles">
-          <h4 style={{ textAlign: "center" }}>{name.toUpperCase()}</h4>
+          <h4 style={{ textAlign: "center" }}> PRODUCT NAME: {name.toUpperCase()}</h4>
           <div onClick={onModalClose} className="close-btn">
             <AiFillCloseCircle size={30} color="rgb(192, 38, 38)" />
           </div>
-          <div>
+          <div className="scroll">
             {prices.map((item) => {
               const { date, priceId, price, } = item;
               // return <div>{date}</div>
@@ -49,7 +49,7 @@ const TableModal = ({ open, onModalClose, historicalPrices }) => {
         </div>
       </div>
     </>,
-    document.getElementById("portal")
+    document.getElementById("TableModal")
   );
 };
 

@@ -1,14 +1,15 @@
-import React from 'react'
-import "./navbar.css"
+import React from 'react';
+import "./navbar.css";
 
-const Navbar = ({}) => {
+
+const Navbar = ({setIsInventoryOpen=()=>{}}) => {
   return (
-    <div className='inventory'>
-        <div>
-          <button className='inventory-btn'>Inventory</button>
-        </div>
+    <>
+    <div className='nav-container'>
+    <button onClick={()=>{setIsInventoryOpen(true)}} className='nav-btn'>Show Inventory</button>
     </div>
+    </>
   )
 }
 
-export default Navbar;
+export default Navbar

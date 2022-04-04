@@ -11,7 +11,7 @@ const Alert = ({ alertContent, closeAlert = () => {} }) => {
     useEffect(() => {
       setTimeout(() => {
         closeAlert();
-      }, 2000);
+      }, 3000);
     });
   return (
     <div className={`alert ${alertClass}`}>
