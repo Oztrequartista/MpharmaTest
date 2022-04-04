@@ -25,9 +25,8 @@ const reducer = (state, action) => {
       const sortedProductIDlist = state.products.sort(
         (a, b) => a.productId - b.productId
       );
-      const lastKeyinPricesObject = Object.keys(state.itemPrices).length + 1;
-      
-      const setNewProductID = sortedProductIDlist.length ? sortedProductIDlist[sortedProductIDlist.length - 1].productId + 1 : lastKeyinPricesObject ;   
+      const lastKeyinPricesObject = Object.keys(state.itemPrices).length + 1;  
+      const setNewProductID = lastKeyinPricesObject ;  
       
 
      
