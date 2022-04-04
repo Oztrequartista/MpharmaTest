@@ -1,0 +1,49 @@
+.delete-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  z-index: 1000;
+  padding: 5px 20px 30px;
+  /* width: 50%; */
+  color: #584c4c;
+  width: fit-content;
+  padding-top: 20px;
+}
+
+.delete-heading {
+  text-align: center;
+}
+
+.confirm-btns {
+  padding: 10px;
+  text-align: center;
+  width: 120px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+@media (max-width: 468px) {
+  .delete-container {
+    width: 80% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .delete-container {
+    width: 80% !important;
+  }
+}
+
+@media (max-width: 969px) {
+  .delete-container {
+    width: 80% !important;
+  }
+}

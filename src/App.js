@@ -17,6 +17,7 @@ import Products from "./components/Products/Products";
 import Alert from "./components/Alert";
 import Loader from "./components/Loader/Loader";
 import NavBar from "./components/NavBar/NavBar";
+import ConfirmDelete from "./components/ConfirmDelete/ConfirmDelete";
 
 import "./App.css";
 
@@ -47,6 +48,8 @@ function App() {
   });
 
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteProducts] = useState(false);
+  const [deleteId, setDeleteId] =  useState();
 
 
 
@@ -125,9 +128,9 @@ function App() {
     setNewProduct(editedProduct);
   };
 
-  const handleProductDelete = (id) => {
+  const handleProductDelete = () => {
     window.scrollTo(0, 0);
-    dispatch({ type: ACTIONS.ITEM_DELETED, payload: id });
+    dispatch({ type: ACTIONS.ITEM_DELETED, payload: deleteId });
   };
 
   const handleProductPriceHistory = (id) => {
@@ -170,12 +173,16 @@ function App() {
           onModalClose={() => setIsModalOpen(false)}
           historicalPrices={historicalPrices}
         />
+        {showDeleteModal && <ConfirmDelete onProductDelete={handleProductDelete} setShowDeleteProducts={setShowDeleteProducts}/>}
         <Products
           state={state}
           handleEditAndAdd={handleEditAndAdd}
-          handleProductDelete={handleProductDelete}
+          onProductDelete={handleProductDelete}
           handleProductPriceHistory={handleProductPriceHistory}
           setIsModalOpen={setIsModalOpen}
+          setShowDeleteProducts={setShowDeleteProducts}
+          setDeleteId={setDeleteId}
+          
         />
       </div>
     </>

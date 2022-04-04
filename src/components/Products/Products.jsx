@@ -7,9 +7,11 @@ import { BiEdit } from "react-icons/bi";
 const Products = ({
   state,
   handleEditAndAdd = () => {},
-  handleProductDelete = () => {},
   handleProductPriceHistory = () => {},
   setIsModalOpen = () => {},
+  setDeleteId=()=>{},
+  setShowDeleteProducts=()=>{}
+
 }) => {
   return (
     <div className="product-container">
@@ -37,7 +39,8 @@ const Products = ({
                 <div
                   onClick={(event) => {
                     event.preventDefault();
-                    handleProductDelete(priceId);
+                    setDeleteId(priceId);
+                    setShowDeleteProducts(true);
                   }}
                   className="btn tooltip"
                   data-testid ="filter"

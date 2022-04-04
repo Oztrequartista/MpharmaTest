@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import "./tablemodal.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-//used createPortal to render and allow this component, which is present outside the DOM, to live within the DOM node
 
 const overlayStyle = {
   position: "fixed",
