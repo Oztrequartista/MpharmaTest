@@ -1,8 +1,9 @@
 .nav-container {
   height: 50px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 10px;
+  align-content: center;
 }
 
 .nav-btn {
@@ -28,14 +29,35 @@
   background-color: #000000;
 }
 
+.logo-text {
+  color: rgb(12, 172, 150);
+  height: 70%;
+  width: 25%;
+  margin-left: 5%;
+  margin: auto 5%;
+  font-family: cursive;
+  font-weight: 800;
+  font-size: 25px;
+}
+
 @media (max-width: 468px) {
   .nav-btn {
-    width: 35% !important;
+    width: 60% !important;
+  }
+  .logo-text {
+    width: 80% !important;
+    font-size: 18px !important;
+    line-height: 2;
   }
 }
 
 @media (max-width: 768px) {
   .nav-btn {
     width: 30%;
+  }
+  .logo-text {
+    width: 80% !important;
+    font-size: 18px !important;
+    line-height: 2;
   }
 }

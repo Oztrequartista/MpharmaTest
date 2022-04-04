@@ -14,10 +14,10 @@ describe("Form.js", () => {
         newProduct={newProduct}
       />
     );
-    const product = screen.getByPlaceholderText("product");
+    const product = screen.getByPlaceholderText("Enter A Product");
     fireEvent.change(product, {target: {value: 'Para'}});
 
-    const price = screen.getByPlaceholderText("price");
+    const price = screen.getByPlaceholderText("Enter A Price");
     fireEvent.change(price, {target: {value: "23"}});
 
     const submit = screen.getByRole("button", {name:"Add Product"})

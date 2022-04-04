@@ -1,15 +1,15 @@
 import React, { useState, useReducer, useEffect } from "react";
 import axios from "axios";
 
-//utilities
+
 import reducer from "./UtilityFunctions/reducer";
 import {
-  getLatestPriceFromProductList,
-  valuesOfAllPrices,
+  createProductDataFromResponse,
+  createPriceStoreForEntireApp,
 } from "./UtilityFunctions/myUtils";
 import ACTIONS from "./UtilityFunctions/actions";
 
-//components
+
 import Inventory from "./components/Inventory/Inventory";
 import TableModal from "./components/TableModal/TableModal";
 import Form from "./components/Form/Form";
@@ -18,7 +18,6 @@ import Alert from "./components/Alert";
 import Loader from "./components/Loader/Loader";
 import NavBar from "./components/NavBar/NavBar";
 
-//styles
 import "./App.css";
 
 const sessionKey = "initial_app_state";
@@ -49,7 +48,9 @@ function App() {
 
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
 
-  //initial page load
+
+
+
   useEffect(() => {
     dispatch({ type: ACTIONS.LOADING });
     let isMounted = true;
@@ -67,13 +68,10 @@ function App() {
       const response = await axios.get(apiEndPoint);
       const data = await response.data;
       const productList = data.products;
-      console.log("productList", productList);
-      const pricesByProductKey = valuesOfAllPrices(productList, "id");
-      console.log("pricesByProductKey", pricesByProductKey);
-      const products = getLatestPriceFromProductList(productList);
-      console.log("products", products);
+      const pricesByProductKey = createPriceStoreForEntireApp(productList, "id");
+      const products = createProductDataFromResponse(productList);
 
-      // set fetched data to state with reducer function
+     
       if (isMounted) {
         dispatch({
           type: ACTIONS.FETCH_PRODUCTS,
@@ -89,12 +87,12 @@ function App() {
     };
   }, []);
 
-  //check value of state after each render
+  
   useEffect(() => {
     localStorage.setItem(sessionKey, JSON.stringify(state));
   }, [state, isEditing]);
 
-  //form functions
+ 
   const handleInputChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -121,7 +119,6 @@ function App() {
   };
 
   const handleEditAndAdd = (id) => {
-    //scroll to form field on Edit
     window.scrollTo(0, 0);
     const editedProduct = state.products.find((item) => item.priceId === id);
     setIsEditing(true);
@@ -144,7 +141,6 @@ function App() {
     });
   };
 
-  //Alert
   const closeAlert = () => {
     dispatch({ type: ACTIONS.CLOSE_MODAL });
   };

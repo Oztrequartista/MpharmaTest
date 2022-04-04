@@ -48,7 +48,7 @@ tr:nth-child(even) {
   background-color: #dad9d9ea;
 }
 
-.close-btn {
+.invoice-close-btn {
   position: absolute;
   top: 5px;
   right: 10px;
@@ -58,5 +58,5 @@ tr:nth-child(even) {
 
 .table-scroll {
   overflow-y: scroll;
-  height: 600px;
+  height: 450px;
 }

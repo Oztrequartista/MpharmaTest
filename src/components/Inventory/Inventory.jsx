@@ -23,7 +23,7 @@ const Inventory = ({ inventory, open, onInventoryClose }) => {
       <div style={overlayStyle}>
         <div className="inventory-modal-styles">
         <h4 style={{ textAlign: "center" }}>PRODUCT INVENTORY</h4>
-        <div onClick={onInventoryClose} className="close-btn">
+        <div onClick={onInventoryClose} className="invoice-close-btn">
             <AiFillCloseCircle size={30} color="rgb(192, 38, 38)" />
           </div>
          <div className="table-scroll">

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./tablemodal.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-//used react portal to display a child into a DOM node that exists outside the DOM hierarchy of the parent component
+//used createPortal to render and allow this component, which is present outside the DOM, to live within the DOM node
 
 const overlayStyle = {
   position: "fixed",
@@ -22,25 +22,22 @@ const TableModal = ({ open, onModalClose, historicalPrices }) => {
     <>
       <div style={overlayStyle}>
         <div className="modal-styles">
-          <h4 style={{ textAlign: "center" }}> PRODUCT NAME: {name.toUpperCase()}</h4>
+          <h4 style={{ textAlign: "center", fontSize:"14px" }}> {name.toUpperCase()}</h4>
           <div onClick={onModalClose} className="close-btn">
-            <AiFillCloseCircle size={30} color="rgb(192, 38, 38)" />
+            <AiFillCloseCircle size={24} color="rgb(192, 38, 38)" />
           </div>
           <div className="scroll">
             {prices.map((item) => {
               const { date, priceId, price, } = item;
-              // return <div>{date}</div>
               return (
-                <table key={priceId}>
-                  <tr>
-                    
-                    <th>Date</th>
-                    <th>Price</th>
+                <table key={priceId} className="table">
+                  <tr className="tr"> 
+                    <th className="th">Date</th>
+                    <th className="th">Price</th>
                   </tr>
-                  <tr>
-                   
-                    <td>{date}</td>
-                    <td> GHS {price}</td>
+                  <tr className="tr">
+                    <td className="td">{date}</td>
+                    <td className="td"> GHS {price}</td>
                   </tr>
                 </table>
               );
