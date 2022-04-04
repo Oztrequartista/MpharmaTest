@@ -14,7 +14,7 @@ const overlayStyle = {
 };
 
 const Inventory = ({ inventory, open, onInventoryClose }) => {
-  console.log("inventory", inventory);
+
   const flattenedInventory = Object.values(inventory).flat();
 
   if (!open) return null;

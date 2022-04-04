@@ -1,9 +1,6 @@
-//Reducer Function
 import ACTIONS from "./actions";
 
 const reducer = (state, action) => {
-  console.log("data from form field to be set to state", action.payload);
-
   switch (action.type) {
     case ACTIONS.FETCH_PRODUCTS:
       const { pricesByProductKey, products } = action.payload;
@@ -13,14 +10,10 @@ const reducer = (state, action) => {
       const { newProduct, isEditing } = action.payload;
 
       const { date, name, itemPrice, productId } = newProduct;
-
-      
       //CREATE CONFIG FOR STATE UPDATES
-
-    
       const priceValueToBeAddedToState = parseFloat(itemPrice);
 
-      //find last price id
+
       const lastPriceIDArray = Object.values(state.itemPrices).flat();
       const sortedPriceIds = lastPriceIDArray.sort(
         (a, b) => a.priceId - b.priceId
@@ -28,17 +21,16 @@ const reducer = (state, action) => {
       const setNewPriceID =
         sortedPriceIds[sortedPriceIds.length - 1].priceId + 1;
 
-      //find last product id
+     
       const sortedProductIDlist = state.products.sort(
         (a, b) => a.productId - b.productId
       );
-
-      const setNewProductID = sortedProductIDlist.length ? sortedProductIDlist[sortedProductIDlist.length - 1].productId + 1 : 1 ;      //if all products are deleted, set productID to 1 and then starting filling array with products
-
-      //find last key in itemPricesState Object
       const lastKeyinPricesObject = Object.keys(state.itemPrices).length + 1;
+      
+      const setNewProductID = sortedProductIDlist.length ? sortedProductIDlist[sortedProductIDlist.length - 1].productId + 1 : lastKeyinPricesObject ;   
+      
 
-      //createNew product to add to state.products
+     
       const newProductToAddToProductState = {
         name,
         productId: setNewProductID,
@@ -47,7 +39,7 @@ const reducer = (state, action) => {
         date,
         priceIdArray: [setNewPriceID],
       };
-      //createNew priceObject to add to state.itemPrices
+     
       const newPriceObjectToAddToItemPricesState = {
         [lastKeyinPricesObject]: [
           {
@@ -59,11 +51,7 @@ const reducer = (state, action) => {
         ],
       };
 
-      console.log("newPriceObjectToAddToItemPricesState", newPriceObjectToAddToItemPricesState)
-
-      // NB Add Button has multiple cases :->
-
-      // 1: check if price value from price field is a number else throw error alert
+    
       if (isNaN(priceValueToBeAddedToState)) {
         return {
           ...state,
@@ -72,7 +60,7 @@ const reducer = (state, action) => {
         };
       }
 
-      //2:  check if isEditing is true before state update
+     
 
       if (isEditing) {
         const newItemPrice = {
@@ -88,11 +76,11 @@ const reducer = (state, action) => {
         const editedProducts = state.products.map((item, index) =>
           item.productId === productId ? newProduct : item
         );
-        //edge case for when item is deleted while being edited : -> find deleted product
+  
         const whenSelectedProductedIsDeletedWhileBeingEdited =
           state.products.find((item) => item.productId === productId);
 
-        //if the above is undefined, go ahead and add new product to state.products and use edited products
+      
         return {
           ...state,
           products:
@@ -104,7 +92,7 @@ const reducer = (state, action) => {
           alertContent: `${name} is the current product name`,
         };
       } else {
-        // if price is a number and item is not being edited, just add your new product to state.products
+     
 
         const newPriceObject = {
           ...state.itemPrices,
@@ -120,7 +108,7 @@ const reducer = (state, action) => {
       }
 
     case ACTIONS.ITEM_DELETED:
-      //filter deleted product
+
       const deletedProduct = state.products.filter(
         (item) => item.priceId === action.payload
       );
