@@ -41,7 +41,7 @@ const Inventory = ({ inventory, open, onInventoryClose }) => {
                 return (
                   <tr key={priceId}>
                     <td>{name}</td>
-                    <td>{price}</td>
+                    <td>GHS {price}</td>
                     <td>{date}</td>
                   </tr>
                 );
