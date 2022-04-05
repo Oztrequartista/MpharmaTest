@@ -1,7 +1,7 @@
 import React from "react";
 import "./form.css";
 
-const Form = ({handleFormSubmit=()=>{}, newProduct, handleInputChange=()=>{}}) => {
+const Form = ({handleFormSubmit=()=>{}, newProduct, handleInputChange=()=>{}, isEditing}) => {
   const { name, itemPrice } = newProduct;
   return (
     <div className="form-container">
@@ -42,7 +42,7 @@ const Form = ({handleFormSubmit=()=>{}, newProduct, handleInputChange=()=>{}}) =
           />
         </div>
 
-        <button className="submit">Add Product</button>
+        <button className="submit">{`${isEditing ? "Edit Product" : "Add Product"}`}</button>
       </form>
     </div>
   );

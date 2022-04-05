@@ -60,7 +60,6 @@ function App() {
     const fetchProducts = async () => {
       const item_value = localStorage.getItem(sessionKey);
 
-      console.log(item_value);
      
      if (item_value){
        const {itemPrices : pricesByProductKey, products } = JSON.parse(item_value);
@@ -94,7 +93,7 @@ function App() {
 
   
   useEffect(() => {
-    console.log(state);
+    // console.log(state);
     localStorage.setItem(sessionKey, JSON.stringify(state));
   }, [state, isEditing]);
 
@@ -170,6 +169,7 @@ function App() {
           handleFormSubmit={handleFormSubmit}
           newProduct={newProduct}
           handleInputChange={handleInputChange}
+          isEditing={isEditing}
         />
         <TableModal
           open={isModalOpen}

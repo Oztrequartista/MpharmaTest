@@ -12,8 +12,6 @@ const reducer = (state, action) => {
       const { date, name, itemPrice, productId } = newProduct;
       //CREATE CONFIG FOR STATE UPDATES
       const priceValueToBeAddedToState = parseFloat(itemPrice);
-
-
       const lastPriceIDArray = Object.values(state.itemPrices).flat();
       const sortedPriceIds = lastPriceIDArray.sort(
         (a, b) => a.priceId - b.priceId
@@ -21,15 +19,10 @@ const reducer = (state, action) => {
       const setNewPriceID =
         sortedPriceIds[sortedPriceIds.length - 1].priceId + 1;
 
-     
-      const sortedProductIDlist = state.products.sort(
-        (a, b) => a.productId - b.productId
-      );
       const lastKeyinPricesObject = Object.keys(state.itemPrices).length + 1;  
       const setNewProductID = lastKeyinPricesObject ;  
-      
+    
 
-     
       const newProductToAddToProductState = {
         name,
         productId: setNewProductID,
@@ -38,6 +31,7 @@ const reducer = (state, action) => {
         date,
         priceIdArray: [setNewPriceID],
       };
+
      
       const newPriceObjectToAddToItemPricesState = {
         [lastKeyinPricesObject]: [
@@ -68,31 +62,41 @@ const reducer = (state, action) => {
           date,
           name,
         };
+      
         const newItemPrices = {
           ...state.itemPrices,
           [productId]: [...state.itemPrices[productId], newItemPrice],
         };
+
+
+        const newItemPricesWhenProductToBeEditedIsDeleted = {
+          ...state.itemPrices,
+          [lastKeyinPricesObject ]: [ newItemPrice],
+        };
+        const editedProductWithNewPriceId = {
+          ...newProduct,
+          priceId: setNewPriceID,
+      }
+
         const editedProducts = state.products.map((item, index) =>
-          item.productId === productId ? newProduct : item
+          item.productId === productId ? editedProductWithNewPriceId : item
         );
   
-        const whenSelectedProductedIsDeletedWhileBeingEdited =
+        const whenSelectedProductIsDeletedWhileBeingEdited =
           state.products.find((item) => item.productId === productId);
 
       
         return {
           ...state,
           products:
-            whenSelectedProductedIsDeletedWhileBeingEdited === undefined
+            whenSelectedProductIsDeletedWhileBeingEdited === undefined
               ? [...state.products, newProductToAddToProductState]
               : editedProducts,
-          itemPrices: newItemPrices,
+        itemPrices: whenSelectedProductIsDeletedWhileBeingEdited === undefined ? newItemPricesWhenProductToBeEditedIsDeleted : newItemPrices,
           isAlertOpen: true,
           alertContent: `${name} is the current product name`,
         };
       } else {
-     
-
         const newPriceObject = {
           ...state.itemPrices,
           ...newPriceObjectToAddToItemPricesState,
