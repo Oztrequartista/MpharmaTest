@@ -94,8 +94,9 @@ function App() {
   
   useEffect(() => {
     // console.log(state);
+    setIsEditing(false); //change state of add button
     localStorage.setItem(sessionKey, JSON.stringify(state));
-  }, [state, isEditing]);
+  }, [state]);
 
  
   const handleInputChange = (event) => {
