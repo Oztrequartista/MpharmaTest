@@ -44,8 +44,10 @@ const reducer = (state, action) => {
         ],
       };
 
+      console.log(typeof priceValueToBeAddedToState);
+
     
-      if (isNaN(priceValueToBeAddedToState) || priceValueToBeAddedToState < 0) {
+      if (isNaN(priceValueToBeAddedToState) || typeof priceValueToBeAddedToState === "number" || priceValueToBeAddedToState < 0) {
         return {
           ...state,
           isAlertOpen: true,
