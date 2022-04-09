@@ -11,7 +11,8 @@ const reducer = (state, action) => {
 
       const { date, name, itemPrice, productId } = newProduct;
       //CREATE CONFIG FOR STATE UPDATES
-      const priceValueToBeAddedToState = parseFloat(itemPrice);
+      let numbers = /^[0-9]+$/;
+      const priceValueToBeAddedToState = itemPrice.match(numbers) && parseFloat(itemPrice);
       const lastPriceIDArray = Object.values(state.itemPrices).flat();
       const sortedPriceIds = lastPriceIDArray.sort(
         (a, b) => a.priceId - b.priceId
@@ -44,10 +45,8 @@ const reducer = (state, action) => {
         ],
       };
 
-      console.log(typeof priceValueToBeAddedToState);
-
     
-      if (isNaN(priceValueToBeAddedToState) || typeof priceValueToBeAddedToState === "number" || priceValueToBeAddedToState < 0) {
+      if (isNaN(priceValueToBeAddedToState) || typeof priceValueToBeAddedToState !== "number" || priceValueToBeAddedToState < 0) {
         return {
           ...state,
           isAlertOpen: true,
